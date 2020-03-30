@@ -39,6 +39,9 @@
         {% if scores['easy'] or scores['normal'] or scores['hard'] %}
             {% for key in scores | keys %}
                 <ul data-dificulty="{{ key }}">
+                    {# 
+                        Utilisation des fichiers de traductions uniquement dans ce cas là car les keys sont écrites en anglais.
+                    #}
                     <li>{{ key | trans }}</li>
                     {% for score in scores[key] %}
                         <li data-score="{{ score.time }}">{{ score.name }} : {{ score.time }}s</li>

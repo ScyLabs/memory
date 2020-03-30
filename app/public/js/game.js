@@ -1,4 +1,4 @@
-// Création d'un objet instanciable Game. (on pourras faire new Game)
+// Création d'un objet instanciable Game. (on pourra faire new Game)
 var Game = (function (gameWrapper, opts) {
 
     // Ici , au lieu d'appeler this directement, on défini _self = this
