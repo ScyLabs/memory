@@ -31,19 +31,19 @@ var Game = (function (gameWrapper, opts) {
     _self.gameWrapper = gameWrapper
     // La DIV générer par le jeu pour contenir les cartes
     var cardsWrapper = null;
-    var mask = _self.gameWrapper.find('.mask');
+    var overlay = _self.gameWrapper.find('.overlay');
 
     // Ici on fait une initialisation de base , pour générer le nombres de cartes par rapport à cardsLength (histoire qu'on ai un aperçu du jeu avant de commencer)
     init();
 
-    //On initialise les actions de lancement de jeu dans le masque qui s'affiche avant de commencer à jouer.
-    _self.gameWrapper.find('.mask').on('click', '.btn', function () {
+    //On initialise les actions de lancement de jeu dans l'overlay qui s'affiche avant de commencer à jouer.
+    _self.gameWrapper.find('.overlay').on('click', '.btn', function () {
         // On défini le nombre de cartes par rapport à la difficulté selectionnée
         _self.state.cardsLength = $(this).data('cards')
         // On défini la dificulté dans le wrapper
         _self.gameWrapper.attr('data-dificulty', $(this).data('dificulty'));
-        // On enlève le masque
-        $(this).parents('.mask').slideToggle(500);
+        // On enlève l'overlay
+        $(this).parents('.overlay').slideToggle(500);
         // On lance la partie ;)
         _self.start();
     })
@@ -124,9 +124,9 @@ var Game = (function (gameWrapper, opts) {
     //CallBack de loose.
     function looseGameCalBack() {
 
-        mask.slideToggle(500);
-        mask.find('.title').text('Dommage, Tu as perdu :(');
-        mask.find('.text').text('Retente ta chance. Sélectionne une dificulté.');
+        overlay.slideToggle(500);
+        overlay.find('.title').text('Dommage, Tu as perdu :(');
+        overlay.find('.text').text('Retente ta chance. Sélectionne une dificulté.');
 
     }
 
@@ -138,15 +138,15 @@ var Game = (function (gameWrapper, opts) {
             url: _self.gameWrapper.data('endaction')
         });
 
-        mask.slideToggle(500);
+        overlay.slideToggle(500);
     
         // Le temps en secondes , correspond au temps de fin - le temps d'arrivé / 1000 (car Date nous renvoie un temps en ms)
         var score = Math.floor((_self.state.gameEndTime - _self.state.gameStartTime) / 1000);
 
         // On informe le joueur qu'il a gagné , et lui donne son score.
-        mask.find('.title').text('Félicitations, tu as gagné en : ' + score + 's');
-        mask.find('.text').text('Enregistre ton score : ');
-        mask.find('.actions').slideToggle(500);
+        overlay.find('.title').text('Félicitations, tu as gagné en : ' + score + 's');
+        overlay.find('.text').text('Enregistre ton score : ');
+        overlay.find('.actions').slideToggle(500);
 
         /* 
           Petite requête ajax pour récupérer le formulaire
@@ -157,14 +157,14 @@ var Game = (function (gameWrapper, opts) {
         var form = $.ajax({
             url: _self.gameWrapper.data('registeraction'),// URL de récupération et traitement du formulaire
             success: function (result) {
-                //On insère le formulaire dans le texte du masque.
-                mask.find('.text').append(result);
+                //On insère le formulaire dans le texte du overlay.
+                overlay.find('.text').append(result);
                 // On envoie la difficulté dans l'input hidden #score_dificulty , pour remplir le formulaire
                 // Notez l'utilisation de object.attr('data-dificulty') au lieu de .data('dificulty') , JQuery me gardait en cache une ancienne version de l'objet...
-                mask.find('.text').find('#score_dificulty').val(_self.gameWrapper.attr('data-dificulty'));
+                overlay.find('.text').find('#score_dificulty').val(_self.gameWrapper.attr('data-dificulty'));
                 
                 
-                mask.find('.text').find('form').on('submit', function (e) {
+                overlay.find('.text').find('form').on('submit', function (e) {
                     //  On désactive la possibilité d'envoyer
                     $(this).find('button').attr('disabled',true);
                     // On cour-circuite l'envoi du formulaire
@@ -183,8 +183,8 @@ var Game = (function (gameWrapper, opts) {
                         success: function (result) {
 
                             // On met à jour le texte avec celui réceptionné dans le résultat JSON du formulaire
-                            mask.find('.text').text(result.message);
-                            mask.find('.actions').slideToggle(500);
+                            overlay.find('.text').text(result.message);
+                            overlay.find('.actions').slideToggle(500);
                             
                             /*
                               Et la dernière requête ajax , qui permet , de façon très simple de récupérer le tableau de scores dans l'API.
@@ -202,7 +202,7 @@ var Game = (function (gameWrapper, opts) {
                                 url: _self.gameWrapper.data('scores'),
                                 success: function (result) {
                                     _self.gameWrapper.find('.scores').remove();
-                                    _self.gameWrapper.find('.mask').before(result);
+                                    _self.gameWrapper.find('.overlay').before(result);
                                 }
                             })
 

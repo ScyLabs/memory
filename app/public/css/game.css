@@ -50,7 +50,7 @@ body {
   border-bottom: 1px solid #000;
   text-align: center;
 }
-#game-wrapper .mask {
+#game-wrapper .overlay {
   position: fixed;
   left: 0;
   top: 0;
@@ -60,29 +60,29 @@ body {
   background: rgba(0, 0, 0, 0.7);
   text-align: center;
 }
-#game-wrapper .mask .content {
+#game-wrapper .overlay .content {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   color: #fff;
 }
-#game-wrapper .mask .content form {
+#game-wrapper .overlay .content form {
   display: block;
   margin-top: 30px;
 }
-#game-wrapper .mask .content form input,
-#game-wrapper .mask .content form button {
+#game-wrapper .overlay .content form input,
+#game-wrapper .overlay .content form button {
   display: block;
   position: relative;
   width: 13rem;
   margin: 0 auto;
 }
-#game-wrapper .mask .content form input {
+#game-wrapper .overlay .content form input {
   margin-bottom: 2rem;
   padding: 0.5rem;
 }
-#game-wrapper .mask .content form button {
+#game-wrapper .overlay .content form button {
   text-transform: uppercase;
   color: #fff;
   background: #3498db;
@@ -90,10 +90,10 @@ body {
   border: none;
   cursor: pointer;
 }
-#game-wrapper .mask .content .title {
+#game-wrapper .overlay .content .title {
   font-size: 2.6rem;
 }
-#game-wrapper .mask .content .btn {
+#game-wrapper .overlay .content .btn {
   background: #3498db;
   color: #fff;
   text-transform: uppercase;
@@ -167,7 +167,7 @@ body {
   }
 }
 @media screen and (max-width: 800px) {
-  #game-wrapper .mask .content .title {
+  #game-wrapper .overlay .content .title {
     font-size: 1.6rem;
   }
   #game-wrapper .scores ul {
