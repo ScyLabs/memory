@@ -8,7 +8,7 @@
     {% if app.environment == 'prod' %}
         <link href="{{ asset('css/game.css') }}" rel="stylesheet" />
     {% else %}
-    <link href="{{ asset('css/game.less') }}" rel="stylesheet/less" />
+        <link href="{{ asset('css/game.less') }}" rel="stylesheet/less" />
         <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
         <script>less = {useFileCache: false}</script>
     {% endif %}
