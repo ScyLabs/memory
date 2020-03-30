@@ -66,6 +66,7 @@ var Game = (function (gameWrapper, opts) {
         
         _self.validPairsLength = 0;
         _self.state.progress = 0;
+        _self.state.cards = [];
         
         // On remove le card_wrapper s'il existe
         _self.gameWrapper.find('#cards-wrapper').remove();
