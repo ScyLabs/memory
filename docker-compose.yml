@@ -1,0 +1,36 @@
+version: '3'
+services:
+  # Base de donnée postgres
+  db:
+    image: postgres:11-alpine
+    # les fichiers de postgres s'enregistrent dans ./db pour rendre le conteneur persistant au cas ou on le down (pour pas perdre les BDD)
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    environment:
+      # Définition des users / password pour Postgres.
+      POSTGRES_USER: main
+      POSTGRES_PASSWORD: main
+      POSTGRES_DB: cards
+    ports: 
+      - 5432:5432
+  # Webserver apache , correspondant à l'image créer par le fichier Dockerfile.app (image maison)
+  webserver:
+    # webserver à besoin du service db pour fonctionner
+    links:
+      - "db:db"
+    environment:
+      # Je défini le DATA_BASE url de symfony dans une variable d'environement du container.
+      # Je le fais ici car on est dans un environement de développement, pour de la vraie production il faudrait générer cette configuration
+      # à l'aide de la fonction symfony console generate:secrets , qui cryptera les variables sensibles telles que la base de donnée.
+      # /!\ On est en développement , donc j'envoie ici , faut pas le faire en prod ;)
+      DATABASE_URL: pgsql://main:main@db:5432/cards
+    build:
+      context: .
+      dockerfile: Dockerfile.app
+    volumes:
+      # Ici je fait un lien entre le dossier ./app du projet et le dossier /var/www/html du container.
+      # Les deux dossiers sont intimement liés , et quand je modifie sur le PC , ca modifiera dans le container
+      - ./app:/var/www/html
+    ports:
+      # On redirige le port 8087 du PC sur le port 80 du container. Le serveur web sera accéssible depuis localhost:8087
+      - 8087:80

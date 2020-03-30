@@ -1,0 +1,89 @@
+<html>
+
+<head>
+    {#
+      En production il n'est pas judicieux par soucis d'optimisation de charger Less en Js , 
+      Du coup , en production nous utiliserons un fichier css simple, compilé au préalable avec la commande lessc.
+    #}
+    {% if app.environment == 'prod' %}
+        <link href="{{ asset('css/game.css') }}" rel="stylesheet" />
+    {% else %}
+    <link href="{{ asset('css/game.less') }}" rel="stylesheet/less" />
+        <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
+        <script>less = {useFileCache: false}</script>
+    {% endif %}
+</head>
+<body>
+{# 
+  Ici , je met beaucoup de datas,
+  Ces datas vont être utilisées dans le Js pour définir certaines options,
+  Ou alors pour connaître les URL de l'API a attaquer.
+  Pourquoi ? Les Urls peuvent potentiellement changer grâce au router de Symfony,
+  nous pouvons quand nous le souhaîtons changer l'URL d'une route sans impacter le code (a condition d'utiliser le nom des routes) d'où le path('route_name') 
+
+  NB :game_max_time est une variable globale twig définie dans config/services.yaml. C'est le temps maximum d'une partie avant de perdre
+#}
+<div id="game-wrapper" data-maxtime="{{ game_max_time }}" data-startaction="{{ path('start_game') }}" data-endaction="{{ path('api_end_game') }}" data-registeraction="{{ path('api_register_score') }}"  data-scores="{{ path('api_scores') }}">
+    <header>
+        <h1>Memory</h1>
+    </header>
+
+    <div class="progress">
+        <span class="bar"></span>
+    </div>
+    <div class="scores">
+        <h2>Scores : </h2>
+        {#
+          On print le tableau de scores
+        #}
+        {% if scores['easy'] or scores['normal'] or scores['hard'] %}
+            {% for key in scores | keys %}
+                <ul data-dificulty="{{ key }}">
+                    <li>{{ key | trans }}</li>
+                    {% for score in scores[key] %}
+                        <li data-score="{{ score.time }}">{{ score.name }} : {{ score.time }}s</li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+
+
+        {% else %}
+            Pas encore de scores
+        {% endif %}
+    </div>
+    <div class="mask">
+        <div class="content">
+            {# 
+              Notez ici que j'ai fait le choix volontairement de ne pas utiliser les fichiers de traductions
+              pour ne pas compliqué le code plus qu'il ne l'est déjà.
+              J'ai utiliser les traductions seulement pour les keys des difficultés.
+              De plus , ce jeu n'a pas forcément besoin d'être multilangues.
+
+            #}
+            <span class="title">Bienvenue sur le jeu Memory</span>
+            <p class="text">Prêt à tenter ta chance ? :) Choisis ta dificulté</p>
+
+            <div class="actions">
+                <button class="btn" data-dificulty="easy" data-cards="10">Facile</button>
+                <button class="btn" data-dificulty="normal" data-cards="15">Moyen</button>
+                <button class="btn" data-dificulty="hard" data-cards="18">Difficile</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+<script src="{{ asset('js/game.js') }}"></script>
+<script>
+    // On récupère le game-wrapper
+    var gameWrapper = $('#game-wrapper');
+    // On défini le max-time correspondant au gameWrapper
+    var opts = {
+        maxTime: gameWrapper.data('maxtime'),
+
+    };
+    // On initialise l'objet Game , Et tout se mettra en place.
+    var game = new Game(gameWrapper, opts);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,235 @@
+body{
+  margin:0;
+}
+*{
+  box-sizing: border-box;
+}
+#game-wrapper{
+    position: relative;
+    padding:2rem;
+    min-height: 100vh;
+    background: #bdc3c7;
+    
+
+    .progress{
+      height:10px;
+      width: 100%;
+      .bar{
+        height:100%;
+        width: 0;
+        background: red;
+        display:block;
+      }
+    }
+
+    .scores{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      h2{
+        display: block;
+        width: 100%;
+        text-align: center;
+      }
+      padding:1.5rem;
+      ul{
+        vertical-align: top;
+        display: inline-block;
+        border:1px solid #000;
+        margin:0;
+        padding:0;
+        &:not(:last-child){
+          border-right: none;
+        }
+        
+        li{
+          line-height: 20px;
+          display: block;
+          padding:0.5rem 2rem;  
+          &:first-child{
+            border-bottom: 1px solid #000;
+            text-align: center;
+          }
+        }
+      }
+      
+      
+    }
+
+    .mask{
+      position: fixed;
+      left:0;
+      top:0;
+      width:100%;
+      height: 100%;
+      z-index: 1;
+      background: rgba(0,0,0,0.7);
+      text-align: center;
+      .content{
+        position: absolute;
+        left:50%;
+        top:50%;
+        transform: translate(-50%,-50%);
+        color:#fff;
+        form{
+          display: block;
+          margin-top: 30px;
+          input,button{
+            display: block;
+            position: relative;
+            width: 13rem;
+            margin:0 auto;
+          }
+          input{
+            margin-bottom: 2rem;
+            padding:0.5rem;
+            
+          }
+          button{
+            text-transform: uppercase;
+            color: #fff;
+            background: #3498db;
+            padding:0.5rem;
+            border:none;
+            cursor: pointer;
+          }
+        }
+        .title{
+          font-size: 2.6rem;
+        }
+        .btn{
+          background: #3498db;
+          color:#fff;
+          text-transform: uppercase;
+          padding:1rem;
+          border:none;
+          letter-spacing: 1px;
+          cursor: pointer;
+        }
+    
+      }
+    }
+  
+    
+    #cards-wrapper{
+      width:100%;
+      display:flex;
+      flex-wrap:wrap;
+      .card{
+        
+        min-width:10%;
+        flex:1;
+        position:relative;
+
+        overflow:hidden;
+        border:1px solid #ededed;
+        transition:transform 1s;
+        cursor:pointer;
+        margin:1px;
+        perspective:1000px;
+        background:#ededed;
+        transform:rotate3d(0,1,0,180deg);     
+        transform-style: preserve-3d;
+        &::before{
+          content:'';
+          position:absolute;
+          left:0;
+          top:0;
+          width:100%;
+          height:100%;
+          background:#ededed;
+          z-index:2;
+          opacity:1;
+          transition:opacity 1ms;
+          transition-delay:300ms;
+      
+        }
+        &::after{
+          content:'';
+          display:block;
+          position: relative;
+          padding-top: 100%;
+        }
+        
+        
+          
+        &.active{
+          &::before{
+            opacity:0;
+          }
+            transform:none;
+        }
+        
+  
+      
+        img{
+          width:100%;
+          display:block;
+          position:absolute;
+  
+        }
+      }
+    }
+    &[data-dificulty="easy"],&[data-dificulty="normal"]{
+      #cards-wrapper .card{
+        min-width: 9%;
+      } 
+    }
+    
+  }
+  
+  @media screen and (max-width:1000px){
+    #game-wrapper{
+      &[data-dificulty="easy"]{
+        #cards-wrapper{
+          .card{
+            min-width: 17%;
+          }
+        }
+      }
+      &[data-dificulty="normal"]{
+        #cards-wrapper{
+          .card{
+            min-width: 15%;
+          }
+        }
+      }
+      #cards-wrapper{
+        .card{
+          min-width: 16%;
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 800px){
+    #game-wrapper{
+      .mask{
+        .content{
+          .title{
+            font-size: 1.6rem;;
+          }
+        }
+        
+      }
+      .scores{
+        ul{
+          flex:1;
+        }
+      }
+    }
+  }
+  @media screen and (max-width:599px){
+    #game-wrapper{
+      .scores{
+        ul{
+          width:100%;
+          flex:auto;
+          margin-bottom: 1rem;
+          &:not(:last-child){
+            border-right: 1px solid #000;;
+          }
+
+        }
+      }
+    }
+  }

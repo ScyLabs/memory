@@ -1,0 +1,18 @@
+<div class="scores">
+    <h2>Scores : </h2>
+
+
+    {% if scores['easy'] or scores['normal'] or scores['hard'] %}
+        {% for key in scores | keys %}
+            <ul data-dificulty="{{ key }}">
+                <li>{{ key | trans }}</li>
+                {% for score in scores[key] %}
+                    <li data-score="{{ score.time }}">{{ score.name }} : {{ score.time }}s</li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+
+    {% else %}
+        Pas encore de scores
+    {% endif %}
+</div>
